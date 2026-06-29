@@ -1,120 +1,196 @@
-3<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8"/>
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Spark — Find Your Perfect Match</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'></text></svg>"/>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>💘</text></svg>"/>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <link href="css/style.css" rel="stylesheet"/>
   <style>
-    .reveal { opacity:0; transform:translateY(24px); transition:opacity .6s ease,transform .6s ease; }
-    .reveal.revealed { opacity:1; transform:none; }
-
+    /* ── Hero ── */
     .hero {
       position: relative;
       min-height: 100vh;
       display: flex;
       align-items: center;
+      padding-top: var(--nav-h);
       overflow: hidden;
-      background: radial-gradient(ellipse at 60% 40%, rgba(155,93,229,0.18) 0%, transparent 55%),
-                  radial-gradient(ellipse at 20% 80%, rgba(255,61,120,0.12) 0%, transparent 50%);
+      background:
+        radial-gradient(ellipse 70% 60% at 70% 30%, rgba(155,93,229,0.16) 0%, transparent 65%),
+        radial-gradient(ellipse 50% 40% at 15% 75%, rgba(255,61,120,0.1) 0%, transparent 55%);
     }
     .hero-headline {
-      font-size: clamp(2.4rem, 6vw, 4.2rem);
-      line-height: 1.1;
+      font-size: clamp(2.6rem, 5.5vw, 4.4rem);
+      line-height: 1.08;
+      letter-spacing: -1px;
       margin-bottom: 1.4rem;
     }
-    .hero-sub {
-      font-size: 1.1rem;
-      color: var(--text-muted);
-      max-width: 480px;
-      margin-bottom: 2rem;
+    .hero-headline em {
+      font-style: italic;
+      background: linear-gradient(130deg, var(--rose-soft), var(--violet-soft));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
-    .hero-trust {
+    .hero-sub {
+      font-size: 1.05rem;
+      color: var(--text-muted);
+      max-width: 460px;
+      margin-bottom: 2.2rem;
+      line-height: 1.8;
+    }
+    .hero-social-proof {
       display: flex;
       align-items: center;
-      gap: 1rem;
-      margin-top: 1.5rem;
-      font-size: .85rem;
+      gap: .9rem;
+      margin-top: 1.8rem;
+      font-size: .82rem;
       color: var(--text-muted);
     }
-    .hero-avatars { display: flex; }
-    .hero-avatars img {
-      width: 36px; height: 36px;
+    .avatar-stack { display: flex; }
+    .avatar-stack img {
+      width: 32px; height: 32px;
       border-radius: 50%;
       border: 2px solid var(--plum);
-      margin-right: -10px;
+      margin-right: -8px;
       object-fit: cover;
     }
-    .hero-mockup {
+
+    /* ── Floating mockup ── */
+    .hero-visual { position: relative; display: flex; justify-content: center; align-items: center; }
+    .mock-phone {
+      width: 252px;
+      background: var(--plum-card);
+      border: 1px solid rgba(155,93,229,0.3);
+      border-radius: 28px;
+      overflow: hidden;
+      box-shadow: 0 40px 90px rgba(0,0,0,0.55), 0 0 0 1px rgba(155,93,229,0.15);
+      animation: floatPhone 5.5s ease-in-out infinite;
       position: relative;
-      display: flex;
-      justify-content: center;
-      align-items: center;
+      z-index: 2;
     }
-    .mock-card {
-      width: 260px;
+    @keyframes floatPhone {
+      0%,100% { transform: translateY(0) rotate(-1.5deg); }
+      50%      { transform: translateY(-16px) rotate(1.5deg); }
+    }
+    .mock-photo {
+      width: 100%; height: 300px;
+      background: linear-gradient(160deg, #3B1885 0%, #9B2DA0 50%, #FF3D78 100%);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 4.5rem;
+    }
+    .mock-info { padding: 1.1rem 1.2rem 1.3rem; }
+    .mock-name { font-size: 1rem; font-weight: 600; margin-bottom: .2rem; }
+    .mock-loc { font-size: .75rem; color: var(--text-muted); margin-bottom: .6rem; }
+    .mock-bio { font-size: .75rem; color: var(--text-muted); margin-bottom: .9rem; line-height: 1.5; }
+    .mock-actions { display: flex; gap: .5rem; }
+    .mock-btn {
+      flex: 1; border: none; border-radius: 12px; padding: .5rem;
+      cursor: pointer; font-size: 1.1rem; transition: transform .15s;
+    }
+    .mock-btn:hover { transform: scale(1.08); }
+    .mock-btn-like { background: rgba(255,61,120,0.15); }
+    .mock-btn-chat { background: rgba(155,93,229,0.15); }
+
+    /* Floating notification badges */
+    .float-badge {
+      position: absolute;
       background: var(--plum-card);
       border: 1px solid var(--border);
-      border-radius: 24px;
-      overflow: hidden;
-      box-shadow: 0 32px 80px rgba(0,0,0,0.5);
-      animation: float 5s ease-in-out infinite;
+      border-radius: 12px;
+      padding: .55rem .9rem;
+      font-size: .78rem;
+      font-weight: 500;
+      white-space: nowrap;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      z-index: 3;
     }
-    @keyframes float {
-      0%,100% { transform: translateY(0) rotate(-2deg); }
-      50%      { transform: translateY(-18px) rotate(2deg); }
+    .badge-match {
+      top: 12%;
+      right: -5%;
+      animation: floatPhone 4.2s ease-in-out infinite .7s;
     }
-    .mock-card-img {
-      width: 100%;
-      height: 320px;
-      object-fit: cover;
-      background: linear-gradient(135deg, #3D1F7A, #7B2D8B);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 5rem;
+    .badge-online {
+      bottom: 18%;
+      left: -8%;
+      animation: floatPhone 4.8s ease-in-out infinite .3s;
     }
-    .mock-card-info { padding: 1.2rem 1.4rem; }
+
+    /* ── Stats bar ── */
     .stats-bar {
-      padding: 2.5rem 0;
+      padding: 2.8rem 0;
       background: var(--plum-mid);
       border-top: 1px solid var(--border);
       border-bottom: 1px solid var(--border);
     }
-    .feature-icon {
-      width: 56px; height: 56px;
-      border-radius: 14px;
-      background: linear-gradient(135deg, rgba(255,61,120,0.15), rgba(155,93,229,0.15));
-      border: 1px solid var(--border);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.4rem;
-      margin-bottom: 1.2rem;
+    .stat-divider {
+      width: 1px;
+      background: var(--border);
+      align-self: stretch;
     }
-    .match-strip { display: flex; gap: 1rem; overflow-x: auto; padding: 1rem 0; scroll-snap-type: x mandatory; }
-    .match-strip::-webkit-scrollbar { height: 4px; }
-    .match-mini { flex: 0 0 200px; scroll-snap-align: start; }
+
+    /* ── Feature grid ── */
+    .feature-card {
+      background: var(--plum-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.8rem;
+      height: 100%;
+      transition: transform .28s cubic-bezier(.2,.8,.3,1), box-shadow .28s, border-color .2s;
+    }
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 50px rgba(0,0,0,.3);
+      border-color: var(--border-hover);
+    }
+    .feature-card h5 {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.05rem;
+      margin-bottom: .55rem;
+    }
+    .feature-card p { font-size: .875rem; color: var(--text-muted); line-height: 1.72; margin: 0; }
+
+    /* ── Match strip ── */
+    .match-strip {
+      display: flex; gap: 1rem;
+      overflow-x: auto; padding: .5rem 0 1rem;
+      scroll-snap-type: x mandatory;
+      -webkit-overflow-scrolling: touch;
+    }
+    .match-strip::-webkit-scrollbar { height: 3px; }
+    .match-strip::-webkit-scrollbar-thumb { background: var(--border); }
+    .match-mini { flex: 0 0 188px; scroll-snap-align: start; }
+    .match-mini .profile-img { height: 220px; }
+
+    /* ── CTA section ── */
+    .cta-section {
+      padding: 5rem 0;
+      background: linear-gradient(135deg, rgba(155,93,229,0.12) 0%, rgba(255,61,120,0.1) 100%);
+      border-top: 1px solid var(--border);
+    }
   </style>
 </head>
 <body>
 
-<!-- NAVBAR -->
+<!-- ════════════════════════════════════
+     NAVBAR
+════════════════════════════════════ -->
 <nav class="navbar navbar-expand-lg fixed-top">
   <div class="container">
     <a class="navbar-brand" href="index.html">Spark<span>.</span></a>
+
     <div class="d-flex align-items-center gap-2 order-lg-last">
-      <button id="dark-toggle" title="Toggle theme"></button>
-      <a href="signup.html" class="btn-spark d-none d-lg-inline-block" style="font-size:.85rem;padding:.5rem 1.2rem;">Join Free</a>
-      <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
+      <button id="dark-toggle" aria-label="Toggle theme">☀️</button>
+      <a href="signup.html" class="nav-join d-none d-lg-inline-block" style="padding:.42rem 1.15rem;border-radius:50px;font-size:.82rem;font-weight:600;color:#fff!important;background:var(--rose);letter-spacing:.3px;transition:all .2s;">Join Free</a>
+      <button class="navbar-toggler ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu" aria-label="Menu">
         <span class="navbar-toggler-icon"></span>
       </button>
     </div>
+
     <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav mx-auto">
+      <ul class="navbar-nav mx-auto gap-1">
         <li class="nav-item"><a class="nav-link active" href="index.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
         <li class="nav-item"><a class="nav-link" href="browse.html">Browse</a></li>
@@ -124,82 +200,101 @@
         <li class="nav-item"><a class="nav-link" href="about.html">About</a></li>
         <li class="nav-item"><a class="nav-link" href="contact.html">Contact</a></li>
       </ul>
+      <a href="signup.html" class="btn-spark d-lg-none mt-2" style="font-size:.85rem;">Join Free</a>
     </div>
   </div>
 </nav>
 
-<!-- HERO -->
+<!-- ════════════════════════════════════
+     HERO
+════════════════════════════════════ -->
 <section class="hero">
-  <canvas id="particle-canvas" style="position:absolute;inset:0;width:100%;height:100%;"></canvas>
-  <div class="container" style="position:relative;z-index:1;padding-top:var(--nav-h);">
+  <canvas id="particle-canvas" style="position:absolute;inset:0;width:100%;height:100%;pointer-events:none;z-index:0;"></canvas>
+
+  <div class="container" style="position:relative;z-index:1;">
     <div class="row align-items-center g-5">
+
+      <!-- Left copy -->
       <div class="col-lg-6">
-        <span class="section-eyebrow">✦ Real connections, not algorithms</span>
+        <div class="eyebrow">Real connections, not algorithms</div>
         <h1 class="hero-headline">
-          Love isn't found.<br>
-          It's <em class="gradient-text">sparked</em>.
+          Love isn't found.<br>It's <em>sparked</em>.
         </h1>
-        <p class="hero-sub">Join 2.4 million people who stopped swiping mindlessly and started connecting meaningfully. Spark uses interest-based matching, not just photos.</p>
+        <p class="hero-sub">
+          Join 2.4 million people who stopped swiping mindlessly and started connecting meaningfully — matched by interests, values, and personality.
+        </p>
         <div class="d-flex flex-wrap gap-3">
-          <a href="signup.html" class="btn-spark">Start for Free ✦</a>
-          <a href="how-it-works.html" class="btn-outline-spark">See How It Works</a>
+          <a href="signup.html" class="btn-spark" style="font-size:.95rem;padding:.8rem 2.1rem;">Start for Free ✦</a>
+          <a href="how-it-works.html" class="btn-outline-spark" style="font-size:.95rem;">How It Works</a>
         </div>
-        <div class="hero-trust">
-          <div class="hero-avatars">
-            <img src="https://i.pravatar.cc/80?img=47" alt="User"/>
-            <img src="https://i.pravatar.cc/80?img=12" alt="User"/>
-            <img src="https://i.pravatar.cc/80?img=33" alt="User"/>
-            <img src="https://i.pravatar.cc/80?img=55" alt="User"/>
+        <div class="hero-social-proof">
+          <div class="avatar-stack">
+            <img src="https://i.pravatar.cc/80?img=47" alt=""/>
+            <img src="https://i.pravatar.cc/80?img=12" alt=""/>
+            <img src="https://i.pravatar.cc/80?img=33" alt=""/>
+            <img src="https://i.pravatar.cc/80?img=55" alt=""/>
           </div>
           <span><strong style="color:var(--text)">12,000+</strong> new matches this week</span>
         </div>
       </div>
-      <div class="col-lg-6 hero-mockup d-none d-lg-flex">
-        <div class="mock-card">
-          <div class="mock-card-img"></div>
-          <div class="mock-card-info">
-            <div class="d-flex justify-content-between align-items-start mb-1">
+
+      <!-- Right visual -->
+      <div class="col-lg-6 hero-visual d-none d-lg-flex">
+        <div class="mock-phone">
+          <div class="mock-photo">🌸</div>
+          <div class="mock-info">
+            <div class="d-flex justify-content-between align-items-center">
               <div>
-                <strong style="font-size:1.1rem">Sophia, 26</strong>
-                <div style="font-size:.8rem;color:var(--text-muted)"><i class="fa fa-location-dot" style="color:var(--rose);font-size:.7rem"></i> London, UK</div>
+                <div class="mock-name">Sophia, 26</div>
+                <div class="mock-loc"><i class="fa fa-location-dot" style="color:var(--rose);font-size:.65rem;margin-right:3px;"></i>London, UK</div>
               </div>
               <span class="profile-badge">97% match</span>
             </div>
-            <p style="font-size:.8rem;color:var(--text-muted);margin-top:.5rem">Bookworm, amateur chef, hiking on weekends </p>
-            <div class="d-flex gap-2 mt-2">
-              <button style="flex:1;background:rgba(255,61,120,0.12);border:1px solid rgba(255,61,120,0.3);border-radius:50px;color:var(--rose);padding:.4rem;cursor:pointer;font-size:1.2rem;">❤️</button>
-              <button style="flex:1;background:rgba(155,93,229,0.12);border:1px solid rgba(155,93,229,0.3);border-radius:50px;color:var(--violet);padding:.4rem;cursor:pointer;font-size:1.2rem;">💬</button>
+            <div class="mock-bio">Bookworm · amateur chef · hiking weekends ☕</div>
+            <div class="mock-actions">
+              <button class="mock-btn mock-btn-like">❤️</button>
+              <button class="mock-btn mock-btn-chat">💬</button>
             </div>
           </div>
         </div>
-        <div style="position:absolute;top:18%;right:8%;background:var(--plum-card);border:1px solid var(--border);border-radius:12px;padding:.6rem 1rem;font-size:.8rem;animation:float 4s ease-in-out infinite .8s;box-shadow:var(--glow);">
-          <span style="color:var(--gold)"></span> <strong>Match alert!</strong>
+
+        <!-- Floating badges -->
+        <div class="float-badge badge-match">
+          <span style="color:var(--gold);">⚡</span>
+          <strong style="margin-left:.3rem;">Match alert!</strong>
         </div>
-        <div style="position:absolute;bottom:22%;left:5%;background:var(--plum-card);border:1px solid var(--border);border-radius:12px;padding:.6rem 1rem;font-size:.8rem;animation:float 4.5s ease-in-out infinite .4s;">
-          <span class="online-dot"></span> <strong>1,847</strong> online now
+        <div class="float-badge badge-online">
+          <span class="online-dot"></span>
+          <strong>1,847</strong> <span style="color:var(--text-muted);">online now</span>
         </div>
       </div>
+
     </div>
   </div>
 </section>
 
-<!-- STATS BAR -->
+<!-- ════════════════════════════════════
+     STATS BAR
+════════════════════════════════════ -->
 <div class="stats-bar">
   <div class="container">
-    <div class="row g-4 text-center">
-      <div class="col-6 col-md-3">
+    <div class="d-flex flex-wrap justify-content-around align-items-center gap-4 text-center">
+      <div>
         <div class="stat-number">2.4M</div>
         <div class="stat-label">Active Members</div>
       </div>
-      <div class="col-6 col-md-3">
+      <div class="stat-divider d-none d-md-block"></div>
+      <div>
         <div class="stat-number">340K</div>
         <div class="stat-label">Couples Formed</div>
       </div>
-      <div class="col-6 col-md-3">
+      <div class="stat-divider d-none d-md-block"></div>
+      <div>
         <div class="stat-number">97%</div>
         <div class="stat-label">Match Accuracy</div>
       </div>
-      <div class="col-6 col-md-3">
+      <div class="stat-divider d-none d-md-block"></div>
+      <div>
         <div class="stat-number">4.8★</div>
         <div class="stat-label">App Store Rating</div>
       </div>
@@ -207,228 +302,226 @@
   </div>
 </div>
 
-<!-- FEATURES -->
-<section style="padding:5rem 0;">
+<!-- ════════════════════════════════════
+     FEATURES
+════════════════════════════════════ -->
+<section class="section">
   <div class="container">
-    <div class="row mb-5">
-      <div class="col-lg-6">
-        <span class="section-eyebrow">Why Spark works</span>
+    <div class="row align-items-end mb-5">
+      <div class="col-lg-5">
+        <div class="eyebrow">Why Spark works</div>
         <h2 class="section-title">Dating that actually <em>makes sense</em></h2>
-        <div class="divider"></div>
+        <div class="divider-line"></div>
+        <p class="text-muted-spark" style="font-size:.925rem;">Most apps optimise for time-on-screen. We optimise for couples formed.</p>
+      </div>
+      <div class="col-lg-4 offset-lg-3 text-lg-end mt-3 mt-lg-0">
+        <a href="how-it-works.html" class="btn-ghost">See how it all works →</a>
       </div>
     </div>
-    <div class="row g-4">
+
+    <div class="row g-3">
       <div class="col-md-6 col-lg-4 reveal">
-        <div class="spark-card p-4 h-100">
-          <div class="feature-icon"></div>
-          <h5 style="font-family:'Playfair Display',serif;margin-bottom:.6rem">Interest-First Matching</h5>
-          <p class="text-muted-spark" style="font-size:.9rem">Our algorithm weighs 47 compatibility factors — values, hobbies, communication styles — not just appearance.</p>
+        <div class="feature-card">
+          <div class="feature-icon">🧠</div>
+          <h5>Interest-First Matching</h5>
+          <p>47 compatibility factors — values, hobbies, communication style — not just photos.</p>
         </div>
       </div>
       <div class="col-md-6 col-lg-4 reveal">
-        <div class="spark-card p-4 h-100">
-          <div class="feature-icon"></div>
-          <h5 style="font-family:'Playfair Display',serif;margin-bottom:.6rem">ID-Verified Profiles</h5>
-          <p class="text-muted-spark" style="font-size:.9rem">Every Spark member is photo-verified. No catfishes, no bots, no ghost accounts — just real people.</p>
+        <div class="feature-card">
+          <div class="feature-icon">🛡️</div>
+          <h5>ID-Verified Profiles</h5>
+          <p>Every member is photo-verified with a selfie check. No catfishes, no bots.</p>
         </div>
       </div>
       <div class="col-md-6 col-lg-4 reveal">
-        <div class="spark-card p-4 h-100">
-          <div class="feature-icon"></div>
-          <h5 style="font-family:'Playfair Display',serif;margin-bottom:.6rem">Conversation Starters</h5>
-          <p class="text-muted-spark" style="font-size:.9rem">Stuck on what to say? Spark suggests personalised icebreakers based on your shared interests.</p>
+        <div class="feature-card">
+          <div class="feature-icon">💬</div>
+          <h5>Conversation Starters</h5>
+          <p>Spark suggests three personalised icebreakers so you never face a blank message box.</p>
         </div>
       </div>
       <div class="col-md-6 col-lg-4 reveal">
-        <div class="spark-card p-4 h-100">
-          <div class="feature-icon"></div>
-          <h5 style="font-family:'Playfair Display',serif;margin-bottom:.6rem">Travel Mode</h5>
-          <p class="text-muted-spark" style="font-size:.9rem">Heading somewhere new? Enable Travel Mode and connect with members in your destination before you arrive.</p>
+        <div class="feature-card">
+          <div class="feature-icon">🌍</div>
+          <h5>Travel Mode</h5>
+          <p>Heading somewhere new? Connect with members in your destination before you arrive.</p>
         </div>
       </div>
       <div class="col-md-6 col-lg-4 reveal">
-        <div class="spark-card p-4 h-100">
-          <div class="feature-icon"></div>
-          <h5 style="font-family:'Playfair Display',serif;margin-bottom:.6rem">Private by Default</h5>
-          <p class="text-muted-spark" style="font-size:.9rem">Blur your photos until you're ready. Share your location only with matches you trust. Your data, your rules.</p>
+        <div class="feature-card">
+          <div class="feature-icon">🔒</div>
+          <h5>Private by Default</h5>
+          <p>Blur photos until you're ready. Share your location only with matches you trust.</p>
         </div>
       </div>
       <div class="col-md-6 col-lg-4 reveal">
-        <div class="spark-card p-4 h-100">
-          <div class="feature-icon"></div>
-          <h5 style="font-family:'Playfair Display',serif;margin-bottom:.6rem">Date Night Planner</h5>
-          <p class="text-muted-spark" style="font-size:.9rem">Once you match, Spark suggests local date ideas based on both your interests — no awkward "where should we go?" texts.</p>
+        <div class="feature-card">
+          <div class="feature-icon">📅</div>
+          <h5>Date Night Planner</h5>
+          <p>Spark suggests local date ideas based on both your interests. No awkward "where to?"</p>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- LIVE MATCHES STRIP -->
-<section style="padding:3rem 0 5rem;background:var(--plum-mid);">
+<!-- ════════════════════════════════════
+     LIVE MATCHES STRIP
+════════════════════════════════════ -->
+<section class="section section-alt section-border">
   <div class="container">
     <div class="d-flex justify-content-between align-items-end mb-4">
       <div>
-        <span class="section-eyebrow">Live activity</span>
-        <h2 class="section-title" style="font-size:1.9rem">Matches <em>happening now</em></h2>
+        <div class="eyebrow">Live activity</div>
+        <h2 class="section-title" style="font-size:1.9rem;">Matches <em>happening now</em></h2>
       </div>
-      <a href="browse.html" class="btn-outline-spark" style="font-size:.85rem;padding:.5rem 1.2rem">Browse All →</a>
+      <a href="browse.html" class="btn-ghost">Browse all →</a>
     </div>
+
     <div class="match-strip">
-      <div class="match-mini">
-        <div class="profile-card">
-          <img class="profile-img" src="https://i.pravatar.cc/300?img=5" alt="Emma"/>
-          <div class="p-3">
-            <div class="d-flex justify-content-between"><strong>Emma, 24</strong><span class="match-percent">94%</span></div>
-            <div style="font-size:.78rem;color:var(--text-muted)"> Manchester · Art & Music</div>
-          </div>
-        </div>
-      </div>
-      <div class="match-mini">
-        <div class="profile-card">
-          <img class="profile-img" src="https://i.pravatar.cc/300?img=8" alt="Liam"/>
-          <div class="p-3">
-            <div class="d-flex justify-content-between"><strong>Liam, 28</strong><span class="match-percent">91%</span></div>
-            <div style="font-size:.78rem;color:var(--text-muted)">📍 Bristol · Hiking & Food</div>
-          </div>
-        </div>
-      </div>
-      <div class="match-mini">
-        <div class="profile-card">
-          <img class="profile-img" src="https://i.pravatar.cc/300?img=16" alt="Sofia"/>
-          <div class="p-3">
-            <div class="d-flex justify-content-between"><strong>Sofia, 25</strong><span class="match-percent">89%</span></div>
-            <div style="font-size:.78rem;color:var(--text-muted)">📍 Edinburgh · Travel & Books</div>
-          </div>
-        </div>
-      </div>
-      <div class="match-mini">
-        <div class="profile-card">
-          <img class="profile-img" src="https://i.pravatar.cc/300?img=22" alt="James"/>
-          <div class="p-3">
-            <div class="d-flex justify-content-between"><strong>James, 30</strong><span class="match-percent">88%</span></div>
-            <div style="font-size:.78rem;color:var(--text-muted)">📍 Leeds · Fitness & Gaming</div>
-          </div>
-        </div>
-      </div>
-      <div class="match-mini">
-        <div class="profile-card">
-          <img class="profile-img" src="https://i.pravatar.cc/300?img=41" alt="Priya"/>
-          <div class="p-3">
-            <div class="d-flex justify-content-between"><strong>Priya, 27</strong><span class="match-percent">96%</span></div>
-            <div style="font-size:.78rem;color:var(--text-muted)">📍 London · Yoga & Cinema</div>
-          </div>
-        </div>
-      </div>
+      <div class="match-mini"><div class="profile-card"><img class="profile-img" src="https://i.pravatar.cc/300?img=5" alt="Emma"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Emma, 24</strong><span class="match-percent" style="font-size:.8rem">94%</span></div><div style="font-size:.72rem;color:var(--text-muted)">📍 Manchester · Art</div></div></div></div>
+      <div class="match-mini"><div class="profile-card"><img class="profile-img" src="https://i.pravatar.cc/300?img=8" alt="Liam"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Liam, 28</strong><span class="match-percent" style="font-size:.8rem">91%</span></div><div style="font-size:.72rem;color:var(--text-muted)">📍 Bristol · Food</div></div></div></div>
+      <div class="match-mini"><div class="profile-card"><img class="profile-img" src="https://i.pravatar.cc/300?img=16" alt="Sofia"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Sofia, 25</strong><span class="match-percent" style="font-size:.8rem">89%</span></div><div style="font-size:.72rem;color:var(--text-muted)">📍 Edinburgh · Travel</div></div></div></div>
+      <div class="match-mini"><div class="profile-card"><img class="profile-img" src="https://i.pravatar.cc/300?img=22" alt="James"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">James, 30</strong><span class="match-percent" style="font-size:.8rem">88%</span></div><div style="font-size:.72rem;color:var(--text-muted)">📍 Leeds · Fitness</div></div></div></div>
+      <div class="match-mini"><div class="profile-card"><img class="profile-img" src="https://i.pravatar.cc/300?img=41" alt="Priya"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Priya, 27</strong><span class="match-percent" style="font-size:.8rem">96%</span></div><div style="font-size:.72rem;color:var(--text-muted)">📍 London · Yoga</div></div></div></div>
+      <div class="match-mini"><div class="profile-card"><img class="profile-img" src="https://i.pravatar.cc/300?img=29" alt="Anya"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Anya, 26</strong><span class="match-percent" style="font-size:.8rem">87%</span></div><div style="font-size:.72rem;color:var(--text-muted)">📍 Oxford · Books</div></div></div></div>
     </div>
   </div>
 </section>
 
-<!-- TESTIMONIALS -->
-<section style="padding:5rem 0;">
+<!-- ════════════════════════════════════
+     TESTIMONIALS
+════════════════════════════════════ -->
+<section class="section">
   <div class="container">
     <div class="text-center mb-5">
-      <span class="section-eyebrow">Real stories</span>
+      <div class="eyebrow justify-content-center">Real stories</div>
       <h2 class="section-title">They <em>found each other</em> on Spark</h2>
-      <div class="divider mx-auto"></div>
+      <div class="divider-line mx-auto"></div>
     </div>
+
     <div class="row g-4">
       <div class="col-md-4 reveal">
-        <div class="testi-card">
-          <div class="stars mb-2">★★★★★</div>
-          <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.2rem">"We both loved obscure 80s films and terrible puns. Spark matched us in week one and we've been inseparable for 18 months."</p>
-          <div class="d-flex align-items-center gap-3">
+        <div class="testi-card h-100">
+          <div class="stars mb-3">★★★★★</div>
+          <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.75;">"We both loved obscure 80s films and terrible puns. Spark matched us in week one and we've been inseparable for 18 months."</p>
+          <div class="d-flex align-items-center gap-3 mt-auto">
             <img src="https://i.pravatar.cc/80?img=47" alt="Clara" class="testi-avatar"/>
-            <div><strong>Clara & Tom</strong><div style="font-size:.8rem;color:var(--text-muted)">Together 18 months · London</div></div>
+            <div>
+              <div style="font-weight:600;font-size:.9rem;">Clara & Tom</div>
+              <div style="font-size:.75rem;color:var(--text-muted);">Together 18 months · London</div>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-md-4 reveal">
-        <div class="testi-card">
-          <div class="stars mb-2">★★★★★</div>
-          <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.2rem">"I was sceptical about dating apps until a friend dragged me onto Spark. Six months later I was at a Taylor Swift concert with the love of my life."</p>
-          <div class="d-flex align-items-center gap-3">
+        <div class="testi-card h-100">
+          <div class="stars mb-3">★★★★★</div>
+          <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.75;">"I was sceptical about dating apps until a friend dragged me onto Spark. Six months later I was at a Taylor Swift concert with the love of my life."</p>
+          <div class="d-flex align-items-center gap-3 mt-auto">
             <img src="https://i.pravatar.cc/80?img=12" alt="Aisha" class="testi-avatar"/>
-            <div><strong>Aisha & Ravi</strong><div style="font-size:.8rem;color:var(--text-muted)">Together 14 months · Birmingham</div></div>
+            <div>
+              <div style="font-weight:600;font-size:.9rem;">Aisha & Ravi</div>
+              <div style="font-size:.75rem;color:var(--text-muted);">Together 14 months · Birmingham</div>
+            </div>
           </div>
         </div>
       </div>
       <div class="col-md-4 reveal">
-        <div class="testi-card">
-          <div class="stars mb-2">★★★★★</div>
-          <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.2rem">"The Date Night Planner feature is genius. Our first date was a sushi-making class — exactly what we'd both put on our profiles. Now we do it every anniversary."</p>
-          <div class="d-flex align-items-center gap-3">
+        <div class="testi-card h-100">
+          <div class="stars mb-3">★★★★★</div>
+          <p style="font-size:.9rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.75;">"The Date Night Planner is genius. Our first date was a sushi-making class — exactly what we'd both put on our profiles. We do it every anniversary now."</p>
+          <div class="d-flex align-items-center gap-3 mt-auto">
             <img src="https://i.pravatar.cc/80?img=33" alt="Nadia" class="testi-avatar"/>
-            <div><strong>Nadia & Kai</strong><div style="font-size:.8rem;color:var(--text-muted)">Together 2 years · Edinburgh</div></div>
+            <div>
+              <div style="font-weight:600;font-size:.9rem;">Nadia & Kai</div>
+              <div style="font-size:.75rem;color:var(--text-muted);">Together 2 years · Edinburgh</div>
+            </div>
           </div>
         </div>
       </div>
     </div>
+
     <div class="text-center mt-4">
-      <a href="success-stories.html" class="btn-outline-spark">Read More Stories →</a>
+      <a href="success-stories.html" class="btn-ghost">Read more stories →</a>
     </div>
   </div>
 </section>
 
-<!-- CTA BANNER -->
-<section style="padding:4rem 0;background:linear-gradient(135deg,rgba(155,93,229,0.2),rgba(255,61,120,0.15));border-top:1px solid var(--border);border-bottom:1px solid var(--border);">
+<!-- ════════════════════════════════════
+     CTA BANNER
+════════════════════════════════════ -->
+<div class="cta-section">
   <div class="container text-center">
+    <div class="eyebrow justify-content-center">Get started today</div>
     <h2 class="section-title mb-3">Ready to find your <em>spark</em>?</h2>
-    <p class="text-muted-spark mb-4" style="max-width:500px;margin:0 auto 2rem">Create your free profile in 2 minutes. No credit card needed to start exploring.</p>
-    <a href="signup.html" class="btn-spark" style="font-size:1.1rem;padding:.9rem 2.5rem;">Join Spark — It's Free ✦</a>
+    <p class="text-muted-spark mb-4" style="max-width:460px;margin-left:auto;margin-right:auto;font-size:.95rem;">
+      Create your free profile in 2 minutes. No credit card needed to start exploring.
+    </p>
+    <div class="d-flex flex-wrap gap-3 justify-content-center">
+      <a href="signup.html" class="btn-spark" style="font-size:1rem;padding:.85rem 2.4rem;">Join Spark — It's Free ✦</a>
+      <a href="pricing.html" class="btn-outline-spark" style="font-size:1rem;">View Pricing</a>
+    </div>
+    <p class="mt-3" style="font-size:.78rem;color:var(--text-faint);">No credit card · Cancel anytime · 14-day money-back guarantee on Premium</p>
   </div>
-</section>
+</div>
 
-<!-- FOOTER -->
+<!-- ════════════════════════════════════
+     FOOTER
+════════════════════════════════════ -->
 <footer>
   <div class="container">
-    <div class="row g-4">
-      <div class="col-lg-4 mb-3">
+    <div class="row g-4 mb-2">
+      <div class="col-lg-4 mb-2">
         <div class="footer-brand mb-2">Spark<span>.</span></div>
-        <p style="font-size:.875rem;color:var(--text-muted);max-width:280px">Real connections built on shared interests, not just first impressions. Free to join, always.</p>
+        <p style="font-size:.875rem;color:var(--text-muted);max-width:270px;line-height:1.75;">Real connections built on shared interests, not just first impressions. Free to join, always.</p>
         <div class="mt-3">
-          <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-          <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-x-twitter"></i></a>
-          <a href="#" class="social-link" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
+          <a href="#" class="social-btn" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+          <a href="#" class="social-btn" aria-label="Twitter/X"><i class="fab fa-x-twitter"></i></a>
+          <a href="#" class="social-btn" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
         </div>
       </div>
-      <div class="col-6 col-lg-2">
-        <h5>Discover</h5>
-        <ul style="list-style:none;padding:0">
+      <div class="col-6 col-md-3 col-lg-2">
+        <h6>Discover</h6>
+        <ul>
           <li><a href="browse.html">Browse Profiles</a></li>
           <li><a href="how-it-works.html">How It Works</a></li>
           <li><a href="success-stories.html">Success Stories</a></li>
           <li><a href="pricing.html">Pricing</a></li>
         </ul>
       </div>
-      <div class="col-6 col-lg-2">
-        <h5>Company</h5>
-        <ul style="list-style:none;padding:0">
+      <div class="col-6 col-md-3 col-lg-2">
+        <h6>Company</h6>
+        <ul>
           <li><a href="about.html">About Us</a></li>
           <li><a href="blog.html">Blog</a></li>
           <li><a href="contact.html">Contact</a></li>
           <li><a href="#">Careers</a></li>
         </ul>
       </div>
-      <div class="col-6 col-lg-2">
-        <h5>Legal</h5>
-        <ul style="list-style:none;padding:0">
+      <div class="col-6 col-md-3 col-lg-2">
+        <h6>Legal</h6>
+        <ul>
           <li><a href="#">Privacy Policy</a></li>
           <li><a href="#">Terms of Service</a></li>
           <li><a href="#">Cookie Settings</a></li>
           <li><a href="#">Safety Tips</a></li>
         </ul>
       </div>
-      <div class="col-6 col-lg-2">
-        <h5>Download</h5>
-        <ul style="list-style:none;padding:0">
+      <div class="col-6 col-md-3 col-lg-2">
+        <h6>Download</h6>
+        <ul>
           <li><a href="#">iOS App</a></li>
           <li><a href="#">Android App</a></li>
         </ul>
+        <div class="mt-3" style="font-size:.75rem;color:var(--text-faint);">Available in the UK, Ireland & Australia</div>
       </div>
     </div>
-    <hr class="footer-divider"/>
-    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2" style="font-size:.8rem;color:var(--text-muted)">
+
+    <hr class="footer-hr"/>
+
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2" style="font-size:.78rem;color:var(--text-faint);">
       <span>© 2026 Spark Dating Ltd. All rights reserved.</span>
       <span>Made with <span class="heart-icon">♥</span> for real connections</span>
     </div>
@@ -438,4 +531,4 @@
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script src="js/main.js"></script>
 </body>
-</html> KJL;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;,/.
+</html>
