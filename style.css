@@ -194,13 +194,3 @@ git add README.md
 git commit -m "docs: update README with final file structure, usage guide, and creator credit"
 echo "✅ Commit #40 done"
 
-echo ""
-echo "🎉🎉🎉 ALL 40 COMMITS COMPLETE! 🎉🎉🎉"
-echo "================================"
-echo "Now push everything to GitHub:"
-echo ""
-echo "  git remote add origin https://github.com/YOUR_USERNAME/spark.git"
-echo "  git push -u origin main"
-echo ""
-echo "Or if remote already added:"
-echo "  git push origin main"
