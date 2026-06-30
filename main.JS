@@ -1,22 +1,19 @@
-#!/bin/bash
-# ═══════════════════════════════════════════════════
-#  SPARK DATING APP — PHASE 4: JAVASCRIPT
-#  8 commits | Creator: Jok
-#  Run AFTER phase3-css.sh
-# ═══════════════════════════════════════════════════
+/* ===== SPARK — MAIN JAVASCRIPT ===== */
 
-set -e
+// ── Dark / Light Mode Toggle ────────────────────────────────────
+(function initTheme() {
+  const toggle = document.getElementById('dark-toggle');
+  if (!toggle) return;
+  const saved = localStorage.getItem('spark-theme');
+  if (saved === 'light') { document.body.classList.add('light-mode'); toggle.textContent = '🌙'; }
+  toggle.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light-mode');
+    toggle.textContent = isLight ? '🌙' : '☀️';
+    localStorage.setItem('spark-theme', isLight ? 'light' : 'dark');
+  });
+})();
 
-echo "⚡ SPARK — Phase 4: JavaScript"
-echo "================================"
-
-# ══════════════════════════════════════════════════
-# COMMIT #25 — Floating heart particles
-# ══════════════════════════════════════════════════
-cat > js/main.js << 'JSEOF'
-/* ===== SPARK — MAIN JAVASCRIPT | Creator: Jok ===== */
-
-// ── Floating Heart Particles (homepage hero) ─────────────────────
+// ── Floating Heart Particles (index.html) ───────────────────────
 function initParticles() {
   const canvas = document.getElementById('particle-canvas');
   if (!canvas) return;
@@ -31,7 +28,7 @@ function initParticles() {
   window.addEventListener('resize', resize);
 
   const HEARTS = ['♥', '♡', '❤'];
-  const COLORS = ['rgba(240,62,110,', 'rgba(255,145,176,', 'rgba(139,92,246,'];
+  const COLORS = ['rgba(255,61,120,', 'rgba(255,122,165,', 'rgba(155,93,229,'];
 
   class Particle {
     constructor() { this.reset(true); }
@@ -69,34 +66,110 @@ function initParticles() {
   })();
 }
 initParticles();
-JSEOF
 
-git add js/main.js
-git commit -m "feat: implement floating heart particle canvas animation on homepage"
-echo "✅ Commit #25 done"
+// ── FAQ Accordion ────────────────────────────────────────────────
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const answer = btn.nextElementSibling;
+    const icon   = btn.querySelector('.faq-icon');
+    const isOpen = answer.classList.contains('open');
 
-# ══════════════════════════════════════════════════
-# COMMIT #26 — Scroll progress bar
-# ══════════════════════════════════════════════════
-cat >> js/main.js << 'JSEOF'
+    // Close all
+    document.querySelectorAll('.faq-answer.open').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-icon.open').forEach(i => i.classList.remove('open'));
 
-// ── Scroll Progress Bar ───────────────────────────────────────────
-(function initScrollBar() {
-  const bar = document.getElementById('scroll-bar');
-  if (!bar) return;
-  window.addEventListener('scroll', () => {
-    const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
-    bar.style.width = scrolled + '%';
+    if (!isOpen) { answer.classList.add('open'); icon.classList.add('open'); }
+  });
+});
+
+// ── Contact Form Validation ──────────────────────────────────────
+(function initContactForm() {
+  const form = document.getElementById('contact-form');
+  if (!form) return;
+
+  function showError(fieldId, msg) {
+    const el = document.getElementById(fieldId + '-error');
+    if (el) { el.textContent = msg; el.classList.add('show'); }
+  }
+  function clearError(fieldId) {
+    const el = document.getElementById(fieldId + '-error');
+    if (el) el.classList.remove('show');
+  }
+  function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+
+  form.addEventListener('submit', e => {
+    e.preventDefault();
+    let valid = true;
+    ['name','email','message'].forEach(f => clearError(f));
+
+    const name    = form.querySelector('#name').value.trim();
+    const email   = form.querySelector('#email').value.trim();
+    const message = form.querySelector('#message').value.trim();
+
+    if (name.length < 2) { showError('name', 'Please enter your full name.'); valid = false; }
+    if (!isEmail(email))  { showError('email', 'Enter a valid email address.'); valid = false; }
+    if (message.length < 10) { showError('message', 'Message must be at least 10 characters.'); valid = false; }
+
+    if (valid) {
+      const btn = form.querySelector('[type=submit]');
+      btn.textContent = 'Sending…';
+      btn.disabled = true;
+      setTimeout(() => {
+        form.innerHTML = `<div class="text-center py-4">
+          <div style="font-size:3rem">💌</div>
+          <h4 class="mt-3" style="font-family:'Playfair Display',serif">Message sent!</h4>
+          <p class="text-muted-spark mt-2">We'll get back to you within 24 hours.</p>
+        </div>`;
+      }, 1200);
+    }
   });
 })();
-JSEOF
 
-git add js/main.js
-git commit -m "feat: add scroll progress bar that fills as user scrolls"
-echo "✅ Commit #26 done"
+// ── Profile Filter (browse.html) ─────────────────────────────────
+(function initProfileFilter() {
+  const btns    = document.querySelectorAll('.filter-btn');
+  const cards   = document.querySelectorAll('.profile-card[data-interest]');
+  const search  = document.getElementById('profile-search');
+  if (!btns.length) return;
 
-# ══════════════════════════════════════════════════
-# COMMIT #27 — Cursor glow effect
-# ══════════════════════════════════════════════════
-cat >> js/main.js << 'JSEOF'
+  let activeFilter = 'all';
 
+  function applyFilters() {
+    const q = search ? search.value.toLowerCase() : '';
+    cards.forEach(card => {
+      const interest = card.dataset.interest || '';
+      const name     = (card.dataset.name || '').toLowerCase();
+      const matchF   = activeFilter === 'all' || interest === activeFilter;
+      const matchQ   = !q || name.includes(q);
+      card.closest('.col').style.display = (matchF && matchQ) ? '' : 'none';
+    });
+  }
+
+  btns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      btns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  if (search) search.addEventListener('input', applyFilters);
+})();
+
+// ── Navbar scroll shrink ─────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const nb = document.querySelector('.navbar');
+  if (!nb) return;
+  nb.style.height = window.scrollY > 40 ? '60px' : '';
+});
+
+// ── Animate elements on scroll ───────────────────────────────────
+(function initScrollReveal() {
+  const els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+})();
