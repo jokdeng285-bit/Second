@@ -115,8 +115,3 @@ git add js/main.js
 git commit -m "feat: implement cursor glow effect that follows mouse"
 echo "✅ Commit #27 done"
 
-# ══════════════════════════════════════════════════
-# COMMIT #28 — Mobile nav drawer
-# ══════════════════════════════════════════════════
-cat >> js/main.js << 'JSEOF'
-
