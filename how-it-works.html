@@ -61,11 +61,6 @@ You'll see all 40 commits appear in your GitHub history with correct timestamps 
   git config --global user.name "Jok"
   git config --global user.email "you@example.com"
   ```
-- **Run the phases in order.** Phase 3 edits the same `css/style.css` file that Phase 1 creates; Phase 4–5 all append to the same `js/main.js`. Skipping a phase will break later ones.
-- **Don't run a phase twice in the same folder.** Each script assumes it's running fresh after the previous phase. If something goes wrong, delete the folder and start over from Phase 1.
-- **The `.sh` scripts themselves are gitignored** — they won't show up as files in your repo, only the actual site files will.
-- Every phase script has `set -e`, so if any step fails, the whole script stops immediately rather than silently continuing.
 
-## Verifying the result
 
 
