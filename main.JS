@@ -1,19 +1,22 @@
-/* ===== SPARK — MAIN JAVASCRIPT ===== */
+#!/bin/bash
+# ═══════════════════════════════════════════════════
+#  SPARK DATING APP — PHASE 4: JAVASCRIPT
+#  8 commits | Creator: Jok
+#  Run AFTER phase3-css.sh
+# ═══════════════════════════════════════════════════
 
-// ── Dark / Light Mode Toggle ────────────────────────────────────
-(function initTheme() {
-  const toggle = document.getElementById('dark-toggle');
-  if (!toggle) return;
-  const saved = localStorage.getItem('spark-theme');
-  if (saved === 'light') { document.body.classList.add('light-mode'); toggle.textContent = '🌙'; }
-  toggle.addEventListener('click', () => {
-    const isLight = document.body.classList.toggle('light-mode');
-    toggle.textContent = isLight ? '🌙' : '☀️';
-    localStorage.setItem('spark-theme', isLight ? 'light' : 'dark');
-  });
-})();
+set -e
 
-// ── Floating Heart Particles (index.html) ───────────────────────
+echo "⚡ SPARK — Phase 4: JavaScript"
+echo "================================"
+
+# ══════════════════════════════════════════════════
+# COMMIT #25 — Floating heart particles
+# ══════════════════════════════════════════════════
+cat > js/main.js << 'JSEOF'
+/* ===== SPARK — MAIN JAVASCRIPT | Creator: Jok ===== */
+
+// ── Floating Heart Particles (homepage hero) ─────────────────────
 function initParticles() {
   const canvas = document.getElementById('particle-canvas');
   if (!canvas) return;
@@ -28,7 +31,7 @@ function initParticles() {
   window.addEventListener('resize', resize);
 
   const HEARTS = ['♥', '♡', '❤'];
-  const COLORS = ['rgba(255,61,120,', 'rgba(255,122,165,', 'rgba(155,93,229,'];
+  const COLORS = ['rgba(240,62,110,', 'rgba(255,145,176,', 'rgba(139,92,246,'];
 
   class Particle {
     constructor() { this.reset(true); }
@@ -66,70 +69,163 @@ function initParticles() {
   })();
 }
 initParticles();
+JSEOF
 
-// ── FAQ Accordion ────────────────────────────────────────────────
-document.querySelectorAll('.faq-question').forEach(btn => {
-  btn.addEventListener('click', () => {
-    const answer = btn.nextElementSibling;
-    const icon   = btn.querySelector('.faq-icon');
-    const isOpen = answer.classList.contains('open');
+git add js/main.js
+git commit -m "feat: implement floating heart particle canvas animation on homepage"
+echo "✅ Commit #25 done"
 
-    // Close all
-    document.querySelectorAll('.faq-answer.open').forEach(a => a.classList.remove('open'));
-    document.querySelectorAll('.faq-icon.open').forEach(i => i.classList.remove('open'));
+# ══════════════════════════════════════════════════
+# COMMIT #26 — Scroll progress bar
+# ══════════════════════════════════════════════════
+cat >> js/main.js << 'JSEOF'
 
-    if (!isOpen) { answer.classList.add('open'); icon.classList.add('open'); }
+// ── Scroll Progress Bar ───────────────────────────────────────────
+(function initScrollBar() {
+  const bar = document.getElementById('scroll-bar');
+  if (!bar) return;
+  window.addEventListener('scroll', () => {
+    const scrolled = (window.scrollY / (document.body.scrollHeight - window.innerHeight)) * 100;
+    bar.style.width = scrolled + '%';
   });
-});
+})();
+JSEOF
 
-// ── Contact Form Validation ──────────────────────────────────────
-(function initContactForm() {
-  const form = document.getElementById('contact-form');
-  if (!form) return;
+git add js/main.js
+git commit -m "feat: add scroll progress bar that fills as user scrolls"
+echo "✅ Commit #26 done"
 
-  function showError(fieldId, msg) {
-    const el = document.getElementById(fieldId + '-error');
-    if (el) { el.textContent = msg; el.classList.add('show'); }
-  }
-  function clearError(fieldId) {
-    const el = document.getElementById(fieldId + '-error');
-    if (el) el.classList.remove('show');
-  }
-  function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+# ══════════════════════════════════════════════════
+# COMMIT #27 — Cursor glow effect
+# ══════════════════════════════════════════════════
+cat >> js/main.js << 'JSEOF'
 
-  form.addEventListener('submit', e => {
-    e.preventDefault();
-    let valid = true;
-    ['name','email','message'].forEach(f => clearError(f));
+// ── Cursor Glow Effect ────────────────────────────────────────────
+(function initCursorGlow() {
+  const glow = document.getElementById('cursor-glow');
+  if (!glow || window.matchMedia('(max-width: 768px)').matches) return;
+  document.addEventListener('mousemove', (e) => {
+    glow.style.left = e.clientX + 'px';
+    glow.style.top  = e.clientY + 'px';
+  });
+})();
+JSEOF
 
-    const name    = form.querySelector('#name').value.trim();
-    const email   = form.querySelector('#email').value.trim();
-    const message = form.querySelector('#message').value.trim();
+git add js/main.js
+git commit -m "feat: implement cursor glow effect that follows mouse"
+echo "✅ Commit #27 done"
 
-    if (name.length < 2) { showError('name', 'Please enter your full name.'); valid = false; }
-    if (!isEmail(email))  { showError('email', 'Enter a valid email address.'); valid = false; }
-    if (message.length < 10) { showError('message', 'Message must be at least 10 characters.'); valid = false; }
+# ══════════════════════════════════════════════════
+# COMMIT #28 — Mobile nav drawer
+# ══════════════════════════════════════════════════
+cat >> js/main.js << 'JSEOF'
 
-    if (valid) {
-      const btn = form.querySelector('[type=submit]');
-      btn.textContent = 'Sending…';
-      btn.disabled = true;
-      setTimeout(() => {
-        form.innerHTML = `<div class="text-center py-4">
-          <div style="font-size:3rem">💌</div>
-          <h4 class="mt-3" style="font-family:'Playfair Display',serif">Message sent!</h4>
-          <p class="text-muted-spark mt-2">We'll get back to you within 24 hours.</p>
-        </div>`;
-      }, 1200);
-    }
+// ── Mobile Nav Drawer ──────────────────────────────────────────────
+(function initMobileNav() {
+  const burger = document.querySelector('.hamburger');
+  const drawer = document.querySelector('.nav-drawer');
+  if (!burger || !drawer) return;
+  burger.addEventListener('click', () => {
+    burger.classList.toggle('open');
+    drawer.classList.toggle('open');
+  });
+  drawer.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      burger.classList.remove('open');
+      drawer.classList.remove('open');
+    });
   });
 })();
 
-// ── Profile Filter (browse.html) ─────────────────────────────────
+// ── Navbar scroll shrink ───────────────────────────────────────────
+window.addEventListener('scroll', () => {
+  const nb = document.querySelector('.navbar');
+  if (!nb) return;
+  nb.classList.toggle('scrolled', window.scrollY > 40);
+});
+JSEOF
+
+git add js/main.js
+git commit -m "feat: build hamburger mobile nav drawer with open/close toggle"
+echo "✅ Commit #28 done"
+
+# ══════════════════════════════════════════════════
+# COMMIT #29 — Dark/light mode toggle
+# ══════════════════════════════════════════════════
+cat >> js/main.js << 'JSEOF'
+
+// ── Dark / Light Mode Toggle ───────────────────────────────────────
+(function initTheme() {
+  const toggle = document.getElementById('dark-toggle');
+  if (!toggle) return;
+  const saved = localStorage.getItem('spark-theme');
+  if (saved === 'light') { document.body.classList.add('light'); toggle.textContent = '🌙'; }
+  toggle.addEventListener('click', () => {
+    const isLight = document.body.classList.toggle('light');
+    toggle.textContent = isLight ? '🌙' : '☀️';
+    localStorage.setItem('spark-theme', isLight ? 'light' : 'dark');
+  });
+})();
+JSEOF
+
+git add js/main.js
+git commit -m "feat: add dark/light mode toggle with localStorage persistence"
+echo "✅ Commit #29 done"
+
+# ══════════════════════════════════════════════════
+# COMMIT #30 — Scroll reveal (IntersectionObserver)
+# ══════════════════════════════════════════════════
+cat >> js/main.js << 'JSEOF'
+
+// ── Scroll Reveal Animation ────────────────────────────────────────
+(function initScrollReveal() {
+  const els = document.querySelectorAll('.reveal');
+  if (!els.length) return;
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
+  }, { threshold: 0.12 });
+  els.forEach(el => io.observe(el));
+})();
+JSEOF
+
+git add js/main.js
+git commit -m "feat: implement IntersectionObserver scroll-reveal for all sections"
+echo "✅ Commit #30 done"
+
+# ══════════════════════════════════════════════════
+# COMMIT #31 — FAQ accordion
+# ══════════════════════════════════════════════════
+cat >> js/main.js << 'JSEOF'
+
+// ── FAQ Accordion ───────────────────────────────────────────────────
+document.querySelectorAll('.faq-q, .faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const answer = btn.nextElementSibling;
+    const icon   = btn.querySelector('.faq-ico, .faq-icon');
+    const isOpen = answer.classList.contains('open');
+
+    document.querySelectorAll('.faq-a.open, .faq-answer.open').forEach(a => a.classList.remove('open'));
+    document.querySelectorAll('.faq-ico.open, .faq-icon.open').forEach(i => i.classList.remove('open'));
+
+    if (!isOpen) { answer.classList.add('open'); if (icon) icon.classList.add('open'); }
+  });
+});
+JSEOF
+
+git add js/main.js
+git commit -m "feat: add FAQ accordion — one open at a time, animated max-height"
+echo "✅ Commit #31 done"
+
+# ══════════════════════════════════════════════════
+# COMMIT #32 — Profile filter + search
+# ══════════════════════════════════════════════════
+cat >> js/main.js << 'JSEOF'
+
+// ── Profile Filter & Search (browse.html) ────────────────────────────
 (function initProfileFilter() {
-  const btns    = document.querySelectorAll('.filter-btn');
-  const cards   = document.querySelectorAll('.profile-card[data-interest]');
-  const search  = document.getElementById('profile-search');
+  const btns   = document.querySelectorAll('.filter-btn');
+  const cards  = document.querySelectorAll('.p-card[data-interest], .profile-card[data-interest]');
+  const search = document.getElementById('profile-search');
   if (!btns.length) return;
 
   let activeFilter = 'all';
@@ -141,7 +237,8 @@ document.querySelectorAll('.faq-question').forEach(btn => {
       const name     = (card.dataset.name || '').toLowerCase();
       const matchF   = activeFilter === 'all' || interest === activeFilter;
       const matchQ   = !q || name.includes(q);
-      card.closest('.col').style.display = (matchF && matchQ) ? '' : 'none';
+      const col = card.closest('[class*="col-"]');
+      if (col) col.style.display = (matchF && matchQ) ? '' : 'none';
     });
   }
 
@@ -156,20 +253,12 @@ document.querySelectorAll('.faq-question').forEach(btn => {
 
   if (search) search.addEventListener('input', applyFilters);
 })();
+JSEOF
 
-// ── Navbar scroll shrink ─────────────────────────────────────────
-window.addEventListener('scroll', () => {
-  const nb = document.querySelector('.navbar');
-  if (!nb) return;
-  nb.style.height = window.scrollY > 40 ? '60px' : '';
-});
+git add js/main.js
+git commit -m "feat: implement profile interest filter and name search on browse page"
+echo "✅ Commit #32 done"
 
-// ── Animate elements on scroll ───────────────────────────────────
-(function initScrollReveal() {
-  const els = document.querySelectorAll('.reveal');
-  if (!els.length) return;
-  const io = new IntersectionObserver((entries) => {
-    entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('revealed'); io.unobserve(e.target); } });
-  }, { threshold: 0.12 });
-  els.forEach(el => io.observe(el));
-})();
+echo ""
+echo "🎉 Phase 4 complete — 8 commits done! (32 total)"
+echo "Next: run phase5-features.sh"
