@@ -9,32 +9,20 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <link href="css/style.css" rel="stylesheet"/>
   <style>
-    .filter-btn {
-      background: transparent;
-      border: 1px solid var(--border);
-      color: var(--text-muted);
-      border-radius: 50px;
-      padding: .4rem 1.1rem;
-      font-size: .85rem;
-      font-weight: 500;
-      cursor: pointer;
-      transition: all .2s;
-      font-family: 'Inter', sans-serif;
-    }
-    .filter-btn:hover, .filter-btn.active {
-      background: linear-gradient(135deg, var(--rose), var(--violet));
-      color: #fff;
-      border-color: transparent;
-    }
-    .search-wrap { position: relative; }
-    .search-wrap i { position:absolute; left:14px; top:50%; transform:translateY(-50%); color:var(--text-muted); font-size:.9rem; }
-    #profile-search { padding-left: 2.5rem; }
-    .profile-actions { display:flex; gap:.5rem; padding:.75rem 1rem; border-top:1px solid var(--border); }
-    .action-btn { flex:1; border:none; border-radius:8px; padding:.5rem; font-size:.9rem; cursor:pointer; transition:all .2s; }
-    .action-like { background:rgba(255,61,120,0.12); color:var(--rose); }
-    .action-like:hover { background:var(--rose); color:#fff; }
-    .action-msg { background:rgba(155,93,229,0.12); color:var(--violet); }
-    .action-msg:hover { background:var(--violet); color:#fff; }
+    .filter-bar { display:flex; flex-wrap:wrap; align-items:center; gap:.75rem; margin-bottom:2rem; }
+    .filter-btn { background:transparent; border:1px solid var(--border); color:var(--text-muted); border-radius:50px; padding:.38rem 1rem; font-size:.82rem; font-weight:500; cursor:pointer; transition:all .2s; font-family:'Inter',sans-serif; }
+    .filter-btn:hover, .filter-btn.active { background:linear-gradient(135deg,var(--rose),#C42BC8); color:#fff; border-color:transparent; }
+    .search-box { position:relative; flex:1; min-width:200px; max-width:280px; }
+    .search-box i { position:absolute; left:12px; top:50%; transform:translateY(-50%); color:var(--text-faint); font-size:.85rem; }
+    .search-box input { padding-left:2.2rem; }
+    .card-actions { display:flex; gap:.4rem; padding:.75rem 1rem; border-top:1px solid var(--border); }
+    .card-act { flex:1; border:none; border-radius:8px; padding:.48rem; font-size:.95rem; cursor:pointer; transition:all .2s; }
+    .act-like { background:rgba(255,61,120,0.1); color:var(--rose); }
+    .act-like:hover { background:var(--rose); color:#fff; }
+    .act-like.liked { background:var(--rose); color:#fff; }
+    .act-chat { background:rgba(155,93,229,0.1); color:var(--violet-soft); }
+    .act-chat:hover { background:var(--violet); color:#fff; }
+    .count-label { font-size:.78rem; color:var(--text-faint); }
   </style>
 </head>
 <body>
@@ -43,14 +31,12 @@
   <div class="container">
     <a class="navbar-brand" href="index.html">Spark<span>.</span></a>
     <div class="d-flex align-items-center gap-2 order-lg-last">
-      <button id="dark-toggle" title="Toggle theme">☀️</button>
-      <a href="signup.html" class="btn-spark d-none d-lg-inline-block" style="font-size:.85rem;padding:.5rem 1.2rem;">Join Free</a>
-      <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu">
-        <span class="navbar-toggler-icon"></span>
-      </button>
+      <button id="dark-toggle">☀️</button>
+      <a href="signup.html" class="nav-join d-none d-lg-inline-block" style="padding:.42rem 1.15rem;border-radius:50px;font-size:.82rem;font-weight:600;color:#fff!important;background:var(--rose);">Join Free</a>
+      <button class="navbar-toggler ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
     </div>
     <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav mx-auto">
+      <ul class="navbar-nav mx-auto gap-1">
         <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
         <li class="nav-item"><a class="nav-link active" href="browse.html">Browse</a></li>
@@ -64,20 +50,67 @@
   </div>
 </nav>
 
-<div class="page-hero" style="padding-top:calc(var(--nav-h) + 2rem);padding-bottom:2rem">
+<div class="page-hero" style="padding-bottom:2rem;">
   <div class="container">
-    <span class="section-eyebrow">Explore</span>
-    <h1 class="section-title">Browse <em>real people</em></h1>
-    <p class="text-muted-spark mt-2">Filter by interest · All profiles are photo-verified</p>
+    <div class="eyebrow justify-content-center">Photo-verified profiles</div>
+    <h1 class="page-hero-title">Browse <em class="gradient-text">real people</em></h1>
+    <p class="page-hero-sub">Filter by interest. Like someone? Sign up to start the conversation.</p>
   </div>
 </div>
 
-<section style="padding:1.5rem 0 5rem">
+<section class="section" style="padding-top:1rem;">
   <div class="container">
-    <!-- Filters -->
-    <div class="d-flex flex-wrap align-items-center gap-3 mb-4">
-      <div class="search-wrap flex-grow-1" style="max-width:300px">
+
+    <div class="filter-bar">
+      <div class="search-box">
         <i class="fa fa-magnifying-glass"></i>
         <input type="text" id="profile-search" class="spark-input" placeholder="Search by name…"/>
       </div>
-      
+      <button class="filter-btn active" data-filter="all">All</button>
+      <button class="filter-btn" data-filter="music">🎵 Music</button>
+      <button class="filter-btn" data-filter="travel">✈️ Travel</button>
+      <button class="filter-btn" data-filter="food">🍜 Food</button>
+      <button class="filter-btn" data-filter="fitness">🏋️ Fitness</button>
+      <button class="filter-btn" data-filter="art">🎨 Art</button>
+      <button class="filter-btn" data-filter="books">📚 Books</button>
+    </div>
+
+    <div class="row g-3" id="profile-grid">
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="music" data-name="emma walsh"><img class="profile-img" src="https://i.pravatar.cc/400?img=5" alt="Emma"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Emma, 24</strong><span class="match-percent" style="font-size:.8rem">94%</span></div><div style="font-size:.72rem;color:var(--text-muted)"><span class="online-dot"></span>Manchester · 🎵 Music</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="travel" data-name="sofia chen"><img class="profile-img" src="https://i.pravatar.cc/400?img=16" alt="Sofia"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Sofia, 25</strong><span class="match-percent" style="font-size:.8rem">89%</span></div><div style="font-size:.72rem;color:var(--text-muted)">Edinburgh · ✈️ Travel</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="fitness" data-name="james park"><img class="profile-img" src="https://i.pravatar.cc/400?img=22" alt="James"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">James, 30</strong><span class="match-percent" style="font-size:.8rem">88%</span></div><div style="font-size:.72rem;color:var(--text-muted)"><span class="online-dot"></span>Leeds · 🏋️ Fitness</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="art" data-name="priya sharma"><img class="profile-img" src="https://i.pravatar.cc/400?img=41" alt="Priya"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Priya, 27</strong><span class="match-percent" style="font-size:.8rem">96%</span></div><div style="font-size:.72rem;color:var(--text-muted)">London · 🎨 Art</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="food" data-name="liam o'brien"><img class="profile-img" src="https://i.pravatar.cc/400?img=8" alt="Liam"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Liam, 28</strong><span class="match-percent" style="font-size:.8rem">91%</span></div><div style="font-size:.72rem;color:var(--text-muted)"><span class="online-dot"></span>Bristol · 🍜 Food</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="books" data-name="anya kowalski"><img class="profile-img" src="https://i.pravatar.cc/400?img=29" alt="Anya"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Anya, 26</strong><span class="match-percent" style="font-size:.8rem">87%</span></div><div style="font-size:.72rem;color:var(--text-muted)">Oxford · 📚 Books</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="music" data-name="noah williams"><img class="profile-img" src="https://i.pravatar.cc/400?img=52" alt="Noah"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Noah, 23</strong><span class="match-percent" style="font-size:.8rem">85%</span></div><div style="font-size:.72rem;color:var(--text-muted)"><span class="online-dot"></span>Glasgow · 🎵 Music</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="travel" data-name="isabella santos"><img class="profile-img" src="https://i.pravatar.cc/400?img=44" alt="Isabella"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Isabella, 29</strong><span class="match-percent" style="font-size:.8rem">92%</span></div><div style="font-size:.72rem;color:var(--text-muted)">London · ✈️ Travel</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="fitness" data-name="ben taylor"><img class="profile-img" src="https://i.pravatar.cc/400?img=67" alt="Ben"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Ben, 32</strong><span class="match-percent" style="font-size:.8rem">83%</span></div><div style="font-size:.72rem;color:var(--text-muted)">Cambridge · 🏋️ Fitness</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="food" data-name="mei lin"><img class="profile-img" src="https://i.pravatar.cc/400?img=35" alt="Mei"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Mei, 25</strong><span class="match-percent" style="font-size:.8rem">90%</span></div><div style="font-size:.72rem;color:var(--text-muted)"><span class="online-dot"></span>London · 🍜 Food</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="art" data-name="zara ahmed"><img class="profile-img" src="https://i.pravatar.cc/400?img=20" alt="Zara"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Zara, 27</strong><span class="match-percent" style="font-size:.8rem">93%</span></div><div style="font-size:.72rem;color:var(--text-muted)">Brighton · 🎨 Art</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+      <div class="col-6 col-md-4 col-lg-3"><div class="profile-card" data-interest="books" data-name="oliver brown"><img class="profile-img" src="https://i.pravatar.cc/400?img=60" alt="Oliver"/><div class="p-3"><div class="d-flex justify-content-between align-items-center mb-1"><strong style="font-size:.9rem">Oliver, 31</strong><span class="match-percent" style="font-size:.8rem">86%</span></div><div style="font-size:.72rem;color:var(--text-muted)">York · 📚 Books</div></div><div class="card-actions"><button class="card-act act-like" onclick="likeCard(this)">❤️ Like</button><button class="card-act act-chat">💬 Chat</button></div></div></div>
+    </div>
+
+    <div class="text-center mt-5 pt-3" style="border-top:1px solid var(--border);">
+      <p class="text-muted-spark mb-3" style="font-size:.875rem;">See someone you like? <a href="signup.html">Sign up</a> to start a conversation.</p>
+      <a href="signup.html" class="btn-spark">Join Spark to Connect ✦</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="row g-4 mb-2">
+      <div class="col-lg-4 mb-2"><div class="footer-brand mb-2">Spark<span>.</span></div><p style="font-size:.875rem;color:var(--text-muted);max-width:270px;line-height:1.75;">Real connections built on shared interests.</p><div class="mt-3"><a href="#" class="social-btn"><i class="fab fa-instagram"></i></a><a href="#" class="social-btn"><i class="fab fa-x-twitter"></i></a><a href="#" class="social-btn"><i class="fab fa-tiktok"></i></a></div></div>
+      <div class="col-6 col-lg-2"><h6>Discover</h6><ul><li><a href="browse.html">Browse Profiles</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="success-stories.html">Success Stories</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
+      <div class="col-6 col-lg-2"><h6>Company</h6><ul><li><a href="about.html">About Us</a></li><li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    </div>
+    <hr class="footer-hr"/>
+    <div class="d-flex flex-wrap justify-content-between gap-2" style="font-size:.78rem;color:var(--text-faint);"><span>© 2026 Spark Dating Ltd.</span><span>Made with <span class="heart-icon">♥</span> for real connections</span></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+<script>function likeCard(btn){btn.textContent='❤️ Liked';btn.classList.add('liked');btn.disabled=true;}</script>
+</body>
+</html>

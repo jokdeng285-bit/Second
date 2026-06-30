@@ -9,16 +9,18 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet"/>
   <link href="css/style.css" rel="stylesheet"/>
   <style>
-    .toggle-wrap { display:flex; align-items:center; gap:.75rem; justify-content:center; margin-bottom:3rem; }
-    .billing-label { font-size:.9rem; color:var(--text-muted); font-weight:500; }
-    .billing-label.active-label { color:var(--text); }
-    .toggle-switch { position:relative; width:48px; height:26px; }
-    .toggle-switch input { opacity:0; width:0; height:0; }
-    .toggle-track { position:absolute; inset:0; background:rgba(155,93,229,0.3); border-radius:13px; cursor:pointer; transition:.3s; border:1px solid var(--border); }
-    .toggle-track::after { content:''; position:absolute; width:18px; height:18px; left:3px; top:3px; background:var(--violet); border-radius:50%; transition:.3s; }
-    input:checked + .toggle-track { background:linear-gradient(135deg,var(--rose),var(--violet)); }
-    input:checked + .toggle-track::after { transform:translateX(22px); background:#fff; }
-    .save-badge { background:rgba(255,209,102,0.15); color:var(--gold); border:1px solid rgba(255,209,102,0.3); border-radius:50px; font-size:.75rem; font-weight:600; padding:.2rem .8rem; }
+    .billing-toggle-wrap { display:flex; align-items:center; gap:.8rem; justify-content:center; margin-bottom:3.5rem; }
+    .billing-label { font-size:.875rem; font-weight:500; color:var(--text-muted); }
+    .billing-label.active { color:var(--text); }
+    .toggle-track { position:relative; width:46px; height:24px; background:rgba(155,93,229,0.2); border:1px solid var(--border); border-radius:12px; cursor:pointer; transition:.3s; flex-shrink:0; }
+    .toggle-track::after { content:''; position:absolute; width:16px; height:16px; left:3px; top:3px; background:var(--violet); border-radius:50%; transition:.3s; }
+    #billing-toggle { display:none; }
+    #billing-toggle:checked + .toggle-track { background:linear-gradient(135deg,var(--rose),#C42BC8); }
+    #billing-toggle:checked + .toggle-track::after { transform:translateX(22px); background:#fff; }
+    .save-pill { background:rgba(255,209,102,0.12); color:var(--gold); border:1px solid rgba(255,209,102,0.3); border-radius:50px; font-size:.7rem; font-weight:700; padding:.18rem .7rem; letter-spacing:.5px; }
+    .trust-row { display:flex; flex-wrap:wrap; justify-content:center; gap:1.5rem; margin-top:2.5rem; }
+    .trust-item { display:flex; align-items:center; gap:.5rem; font-size:.8rem; color:var(--text-muted); }
+    .trust-icon { color:var(--violet); }
   </style>
 </head>
 <body>
@@ -27,12 +29,12 @@
   <div class="container">
     <a class="navbar-brand" href="index.html">Spark<span>.</span></a>
     <div class="d-flex align-items-center gap-2 order-lg-last">
-      <button id="dark-toggle" title="Toggle theme">☀️</button>
-      <a href="signup.html" class="btn-spark d-none d-lg-inline-block" style="font-size:.85rem;padding:.5rem 1.2rem;">Join Free</a>
-      <button class="navbar-toggler ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
+      <button id="dark-toggle">☀️</button>
+      <a href="signup.html" class="nav-join d-none d-lg-inline-block" style="padding:.42rem 1.15rem;border-radius:50px;font-size:.82rem;font-weight:600;color:#fff!important;background:var(--rose);">Join Free</a>
+      <button class="navbar-toggler ms-1" type="button" data-bs-toggle="collapse" data-bs-target="#navMenu"><span class="navbar-toggler-icon"></span></button>
     </div>
     <div class="collapse navbar-collapse" id="navMenu">
-      <ul class="navbar-nav mx-auto">
+      <ul class="navbar-nav mx-auto gap-1">
         <li class="nav-item"><a class="nav-link" href="index.html">Home</a></li>
         <li class="nav-item"><a class="nav-link" href="how-it-works.html">How It Works</a></li>
         <li class="nav-item"><a class="nav-link" href="browse.html">Browse</a></li>
@@ -46,25 +48,24 @@
   </div>
 </nav>
 
-<div class="page-hero" style="padding-top:calc(var(--nav-h) + 2rem)">
+<div class="page-hero">
   <div class="container">
-    <span class="section-eyebrow">Simple pricing</span>
-    <h1 class="section-title">Free to start. <em>More when you're ready.</em></h1>
-    <p class="text-muted-spark mt-3">No hidden fees. Cancel any time. 14-day money-back guarantee on Premium.</p>
+    <div class="eyebrow justify-content-center">Simple, honest pricing</div>
+    <h1 class="page-hero-title">Free to start. <em class="gradient-text">More when you're ready.</em></h1>
+    <p class="page-hero-sub">No hidden fees. Cancel any time. 14-day money-back guarantee on Premium.</p>
   </div>
 </div>
 
-<section style="padding:2rem 0 5rem">
+<section class="section" style="padding-top:1.5rem;">
   <div class="container">
 
-    <!-- Billing toggle -->
-    <div class="toggle-wrap">
-      <span class="billing-label active-label" id="monthly-label">Monthly</span>
-      <label class="toggle-switch">
+    <div class="billing-toggle-wrap">
+      <span class="billing-label active" id="lbl-monthly">Monthly</span>
+      <label for="billing-toggle" style="display:flex;cursor:pointer;">
         <input type="checkbox" id="billing-toggle"/>
         <span class="toggle-track"></span>
       </label>
-      <span class="billing-label" id="annual-label">Annual <span class="save-badge">Save 40%</span></span>
+      <span class="billing-label" id="lbl-annual">Annual &nbsp;<span class="save-pill">Save 40%</span></span>
     </div>
 
     <div class="row g-4 justify-content-center align-items-stretch">
@@ -72,66 +73,101 @@
       <!-- Free -->
       <div class="col-md-6 col-lg-4">
         <div class="pricing-card h-100">
-          <div class="mb-1" style="font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--text-muted);font-weight:600">Free</div>
+          <div class="mb-1" style="font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--text-muted);font-weight:700;">Free</div>
           <div class="d-flex align-items-end gap-1 mb-1">
             <span class="price-amount">£0</span>
           </div>
-          <div class="price-per text-muted-spark mb-3">Always free</div>
-          <p style="font-size:.875rem;color:var(--text-muted);margin-bottom:1.5rem">Everything you need to get started and find your first connections.</p>
-          <a href="signup.html" class="btn-outline-spark d-block text-center mb-4">Get Started Free</a>
-          <div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> Up to 15 daily matches</div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> 5 messages per match per day</div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> Photo verification badge</div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> Interest-based matching</div>
-            <div class="plan-feature"><span style="color:var(--border)">✕</span> Unlimited messaging</div>
-            <div class="plan-feature"><span style="color:var(--border)">✕</span> Read receipts</div>
-            <div class="plan-feature"><span style="color:var(--border)">✕</span> Incognito mode</div>
-            <div class="plan-feature"><span style="color:var(--border)">✕</span> Profile boost</div>
-          </div>
+          <div class="price-per mb-3">Always free</div>
+          <p style="font-size:.85rem;color:var(--text-muted);margin-bottom:1.5rem;line-height:1.7;">Everything you need to get started and find your first connections.</p>
+          <a href="signup.html" class="btn-outline-spark d-block text-center mb-4" style="font-size:.875rem;">Get Started Free</a>
+          <div class="plan-feature on"><span class="chk">✦</span> Up to 15 daily matches</div>
+          <div class="plan-feature on"><span class="chk">✦</span> 5 messages per match/day</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Photo verification badge</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Interest-based matching</div>
+          <div class="plan-feature"><span class="off">✕</span> Unlimited messaging</div>
+          <div class="plan-feature"><span class="off">✕</span> Read receipts</div>
+          <div class="plan-feature"><span class="off">✕</span> Incognito mode</div>
+          <div class="plan-feature"><span class="off">✕</span> Profile boost</div>
         </div>
       </div>
 
-      <!-- Premium (featured) -->
+      <!-- Premium -->
       <div class="col-md-6 col-lg-4">
         <div class="pricing-card featured h-100">
           <div class="pricing-badge">Most Popular</div>
-          <div class="mb-1" style="font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--rose);font-weight:600">Premium</div>
+          <div class="mb-1" style="font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--rose);font-weight:700;">Premium</div>
           <div class="d-flex align-items-end gap-1 mb-1">
-            <span class="price-amount" id="premium-price">£14</span>
-            <span class="price-per text-muted-spark" style="padding-bottom:.6rem" id="premium-period">/month</span>
+            <span class="price-amount" id="prem-price">£14</span>
+            <span class="price-per" style="padding-bottom:.55rem;" id="prem-period">/month</span>
           </div>
-          <div class="price-per text-muted-spark mb-3" id="premium-note">Billed monthly</div>
-          <a href="signup.html" class="btn-spark d-block text-center mb-4">Start 14-Day Free Trial</a>
-          <div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> Everything in Free</div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> Unlimited messaging</div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> Read receipts</div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> See who liked you</div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> 1 profile boost per week</div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> Incognito mode</div>
-            <div class="plan-feature active-feature"><span class="check">✦</span> Advanced filters</div>
-            <div class="plan-feature"><span style="color:var(--border)">✕</span> Priority support</div>
-          </div>
+          <div class="price-per mb-3" id="prem-note">Billed monthly</div>
+          <a href="signup.html" class="btn-spark d-block text-center mb-4" style="font-size:.875rem;">Start 14-Day Free Trial</a>
+          <div class="plan-feature on"><span class="chk">✦</span> Everything in Free</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Unlimited messaging</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Read receipts</div>
+          <div class="plan-feature on"><span class="chk">✦</span> See who liked you</div>
+          <div class="plan-feature on"><span class="chk">✦</span> 1 profile boost/week</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Incognito mode</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Advanced filters</div>
+          <div class="plan-feature"><span class="off">✕</span> Priority support</div>
         </div>
       </div>
 
-      <!-- Spark Gold -->
+      <!-- Gold -->
       <div class="col-md-6 col-lg-4">
-        <div class="pricing-card h-100">
-          <div class="mb-1" style="font-size:.8rem;letter-spacing:2px;text-transform:uppercase;color:var(--gold);font-weight:600">Spark Gold</div>
+        <div class="pricing-card h-100" style="border-color:rgba(255,209,102,0.25);">
+          <div class="mb-1" style="font-size:.7rem;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);font-weight:700;">Spark Gold</div>
           <div class="d-flex align-items-end gap-1 mb-1">
             <span class="price-amount" id="gold-price">£29</span>
-            <span class="price-per text-muted-spark" style="padding-bottom:.6rem" id="gold-period">/month</span>
+            <span class="price-per" style="padding-bottom:.55rem;" id="gold-period">/month</span>
           </div>
-          <div class="price-per text-muted-spark mb-3" id="gold-note">Billed monthly</div>
-          <a href="signup.html" class="btn-outline-spark d-block text-center mb-4" style="border-color:var(--gold);color:var(--gold)">Get Spark Gold</a>
-          <div>
-            
-            <div class="plan-feature active-feature"><span class="check">✦</span> Dedicated priority support</div>
-          </div>
+          <div class="price-per mb-3" id="gold-note">Billed monthly</div>
+          <a href="signup.html" class="btn-outline-spark d-block text-center mb-4" style="font-size:.875rem;border-color:rgba(255,209,102,0.4);color:var(--gold)!important;">Get Spark Gold</a>
+          <div class="plan-feature on"><span class="chk">✦</span> Everything in Premium</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Daily priority placement</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Gold profile badge</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Unlimited undo last pass</div>
+          <div class="plan-feature on"><span class="chk">✦</span> SuperLike × 5 per day</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Full Date Night Planner</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Travel Mode</div>
+          <div class="plan-feature on"><span class="chk">✦</span> Priority support</div>
         </div>
       </div>
     </div>
 
-    
+    <div class="trust-row">
+      <div class="trust-item"><span class="trust-icon">🔒</span> Secure via Stripe</div>
+      <div class="trust-item"><span class="trust-icon">↩️</span> 14-day money-back</div>
+      <div class="trust-item"><span class="trust-icon">✕</span> Cancel any time</div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="container">
+    <div class="row g-4 mb-2">
+      <div class="col-lg-4 mb-2"><div class="footer-brand mb-2">Spark<span>.</span></div><p style="font-size:.875rem;color:var(--text-muted);max-width:270px;line-height:1.75;">Real connections built on shared interests.</p><div class="mt-3"><a href="#" class="social-btn"><i class="fab fa-instagram"></i></a><a href="#" class="social-btn"><i class="fab fa-x-twitter"></i></a><a href="#" class="social-btn"><i class="fab fa-tiktok"></i></a></div></div>
+      <div class="col-6 col-lg-2"><h6>Discover</h6><ul><li><a href="browse.html">Browse Profiles</a></li><li><a href="how-it-works.html">How It Works</a></li><li><a href="success-stories.html">Success Stories</a></li><li><a href="pricing.html">Pricing</a></li></ul></div>
+      <div class="col-6 col-lg-2"><h6>Company</h6><ul><li><a href="about.html">About Us</a></li><li><a href="blog.html">Blog</a></li><li><a href="contact.html">Contact</a></li></ul></div>
+    </div>
+    <hr class="footer-hr"/>
+    <div class="d-flex flex-wrap justify-content-between gap-2" style="font-size:.78rem;color:var(--text-faint);"><span>© 2026 Spark Dating Ltd.</span><span>Made with <span class="heart-icon">♥</span> for real connections</span></div>
+  </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script src="js/main.js"></script>
+<script>
+  const tog = document.getElementById('billing-toggle');
+  tog.addEventListener('change', () => {
+    const annual = tog.checked;
+    document.getElementById('prem-price').textContent  = annual ? '£8'  : '£14';
+    document.getElementById('prem-note').textContent   = annual ? 'Billed £96/year' : 'Billed monthly';
+    document.getElementById('gold-price').textContent  = annual ? '£17' : '£29';
+    document.getElementById('gold-note').textContent   = annual ? 'Billed £204/year' : 'Billed monthly';
+    document.getElementById('lbl-monthly').classList.toggle('active', !annual);
+    document.getElementById('lbl-annual').classList.toggle('active', annual);
+  });
+</script>
+</body>
+</html>
