@@ -100,18 +100,3 @@ echo "✅ Commit #26 done"
 # ══════════════════════════════════════════════════
 cat >> js/main.js << 'JSEOF'
 
-// ── Cursor Glow Effect ────────────────────────────────────────────
-(function initCursorGlow() {
-  const glow = document.getElementById('cursor-glow');
-  if (!glow || window.matchMedia('(max-width: 768px)').matches) return;
-  document.addEventListener('mousemove', (e) => {
-    glow.style.left = e.clientX + 'px';
-    glow.style.top  = e.clientY + 'px';
-  });
-})();
-JSEOF
-
-git add js/main.js
-git commit -m "feat: implement cursor glow effect that follows mouse"
-echo "✅ Commit #27 done"
-
