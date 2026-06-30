@@ -179,18 +179,3 @@ spark/
     └── main.js
 ```
 
-## 🌐 Browser Support
-Chrome 124+, Firefox 126+, Safari 17+, Edge 124+. Uses `IntersectionObserver`, `canvas`, and CSS custom properties.
-
-## 📜 Licence
-MIT — use freely for personal or commercial projects.
-
----
-
-*Crafted with ♥ by Jok*
-EOF
-
-git add README.md
-git commit -m "docs: update README with final file structure, usage guide, and creator credit"
-echo "✅ Commit #40 done"
-
